@@ -1,6 +1,5 @@
-# + if list is empty
-
 # File handling: Create file, save file, load file
+
 tasks = []
 
 # add
@@ -17,10 +16,15 @@ def add_task(task):
 def delete_task():
     view_tasks()
 
-    task = input("Enter a task to delete: ")
-    tasks.remove(task)
-    return tasks
-# no tasks to delete
+    if not tasks:
+        return
+
+    try:
+        task = int(input("Enter a task number to delete: "))
+        tasks.pop(task-1)
+        print(f"Task Removed: {task}")
+    except ValueError:
+        print("Please enter a number")
 
 # list
 def view_tasks():
@@ -32,10 +36,22 @@ def view_tasks():
     else:
         print("There are no tasks added.")
 
+def completed_tasks():
+    view_tasks()
+    if not tasks:
+        return
+
+    index = int(input("Enter task number: "))
+    if 1 <= index <= len(tasks):
+        tasks[index-1]['Completed'] = True
+        print(f"Marked as completed: {tasks[index-1]['task']}")
+    else:
+        print("Invalid task number. Try again.")
+
 def main():
     while True:
         print("----- TO DO LIST -----")
-        print("1.Add task | 2.Delete | 3.Show tasks | 4.Exit")
+        print("1.Add task | 2.Delete | 3.Show tasks | 4.Completed | 5. Exit | 6.Load")
         try:
             choice = int(input("Enter your choice: "))
         except ValueError:
@@ -51,6 +67,8 @@ def main():
         elif choice == 3:
             view_tasks()
         elif choice == 4:
+            completed_tasks()
+        elif choice == 5:
             print("Exiting...")
             break
 
