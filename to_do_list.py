@@ -1,34 +1,59 @@
 # + if list is empty
 
+# File handling: Create file, save file, load file
 tasks = []
 
 # add
-def add_task():
-    task = input("Enter a task: ")
-    tasks.append(task)
-    return tasks
+def add_task(task):
+    if task and task.strip():
+        tasks.append({
+            "task":task, 'Completed': False
+        })
+        print('Task added successfully')
+    else:
+        print("Please enter a task")
 
 # delete
 def delete_task():
+    view_tasks()
+
     task = input("Enter a task to delete: ")
     tasks.remove(task)
     return tasks
+# no tasks to delete
 
 # list
-def print_tasks():
-    print("LIST")
-    task_list = [print(f"{t}") for t in tasks]
+def view_tasks():
+    if tasks:
+        print("\n TO-DO")
+        for index, task in enumerate(tasks, start=1):
+            mark = "✔" if task['Completed'] else ''
+            print(f"{index}. {task['task']}{mark}")
+    else:
+        print("There are no tasks added.")
 
-while True:
-    print("----- TO DO LIST -----")
-    print("1.Add task\n2.Delete\n3.Show tasks\n4.Exit")
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        add_task()
-    elif choice == "2":
-        delete_task()
-    elif choice == "3":
-        print_tasks()
-    elif choice == "4":
-        print("Exiting...")
-        break
+def main():
+    while True:
+        print("----- TO DO LIST -----")
+        print("1.Add task | 2.Delete | 3.Show tasks | 4.Exit")
+        try:
+            choice = int(input("Enter your choice: "))
+        except ValueError:
+            print("Oops! That was no valid number. Try again...")
+            continue
+
+        # exception ValueError
+        if choice == 1:
+            task = input('Enter task: ').strip()
+            add_task(task)
+        elif choice == 2:
+            delete_task()
+        elif choice == 3:
+            view_tasks()
+        elif choice == 4:
+            print("Exiting...")
+            break
+
+if __name__ == "__main__":
+    main()
+
