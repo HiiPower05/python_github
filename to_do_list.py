@@ -1,6 +1,25 @@
 # File handling: Create file, save file, load file
-
+import json
 tasks = []
+filename = "tasks.json"
+
+def load_tasks():
+    global tasks
+    try:
+        with open(filename, 'r') as file:
+            tasks = json.load(file)
+            print(f"{len(tasks)} tasks from {filename}")
+    except FileNotFoundError:
+        tasks = []
+        print("No previous tasks found. Starting again...")
+    except json.JSONDecodeError:
+        tasks = []
+        print("File corrupted. Starting again...")
+
+def save_tasks():
+    with open(filename, 'w') as file:
+        json.dump(tasks, file, indent=4)
+    print(f"Tasks saved to {filename}.")
 
 # add
 def add_task(task):
@@ -49,6 +68,8 @@ def completed_tasks():
         print("Invalid task number. Try again.")
 
 def main():
+    load_tasks()
+
     while True:
         print("----- TO DO LIST -----")
         print("1.Add task | 2.Delete | 3.Show tasks | 4.Completed | 5. Exit | 6.Load")
@@ -69,8 +90,11 @@ def main():
         elif choice == 4:
             completed_tasks()
         elif choice == 5:
+            save_tasks()
             print("Exiting...")
             break
+        else:
+            print("Invalid choice.")
 
 if __name__ == "__main__":
     main()
